@@ -8,10 +8,9 @@
 #include "cli_drawer.h"
 
 int main() {
-    Drawer drawer;
-    drawer.clear();
-    drawer.printFrame();
-    drawer.clear();
-    drawer.printFrame();
+    cli_renderer::Drawer drawer;
+    drawer.setCharacter({'X'}, drawer.width / 2, drawer.height / 2);
+    drawer.drawFrame();
+
     return 0;
 }

@@ -5,39 +5,57 @@
 
 #pragma once
 
-#include <windows.h>
 
 #include <cstdint>
+#include <cstdio>
 #include <vector>
 
-const COORD topLeft = {0, 0};
+namespace cli_renderer {
+    struct Coord {
+        int x;
+        int y;
+    };
 
-struct Colour {
-    uint8_t r;
-    uint8_t g;
-    uint8_t b;
-};
+    struct Colour {
+        uint8_t r;
+        uint8_t g;
+        uint8_t b;
+    };
 
-struct Character {
-    char character;
-    Colour colour;
-};
+    struct Character {
+        char value;
+        //Colour colour;
+    };
 
-inline void printCharacter(Character character) {
-    printf("\033[38;2;%d;%d;%dm%c\033[0m", character.colour.r,
-           character.colour.g, character.colour.b, character.character);
-};
+    class Drawer {
+    public:
+        Drawer();
 
-class Drawer {
-   public:
-    Drawer();
+        void clear();
 
-    void clear();
-    void resetCursor();
-    void printFrame();
+        void drawFrame();
 
-   private:
-    HANDLE console;
-    CONSOLE_SCREEN_BUFFER_INFO screen;
-    std::vector<std::vector<Character>> characterBuffer;
-};
+        void resetCursor();
+
+        int width;
+        int height;
+
+        inline Character getCharacter(int x, int y) {
+            return characters[y][x];
+        }
+
+        inline void setCharacter(Character character, int x, int y) {
+            characters[y][x] = character;
+        }
+
+        std::vector<std::vector<Character>> characters;
+    private:
+        static inline void printCharacter(Character character) {
+            printf("%c", character.value);
+            //printf("\033[38;2;%d;%d;%dm%c\033[0m", character.colour.r,
+            //       character.colour.g, character.colour.b, character.character);
+        };
+
+        int charCount;
+    };
+}
